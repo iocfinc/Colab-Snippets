@@ -25,7 +25,7 @@ Adding `!` to a command like `dir` or `cd` will allow you to run that command wh
 
 Use case would be `!` for commands like `ls`, `wget`. Once we have to change the location inside the virtual session, we have to use `%`. An example would be `% cd content/gdrive/<sub-directory>`. Simply using `! cd` will not change the actual working directory. This would be useful when you want to point to a directory where the helper files are located.
 
-### Installing additional modules
+### Installing additional modules to Python
 
 Similar to using anaconda prompt or the terminal, we can also use pip to install additional modules to our session. I have yet to find a list of default available modules in Colab. From what I have done before, it looks like the basics are already in the default Colab environment with the addition of TensorFlow.
 
@@ -36,6 +36,14 @@ Similar to using anaconda prompt or the terminal, we can also use pip to install
 Should there be any issues using the simple `! pip install` command, I suggest looking at StackOverflow for possible issues or on how to install a module.
 
 To add to this, every time the session in Colab is ended all the temporary files that were linked to that session would be removed. So Google Drive would be un-mounted and modules would return to default. **TLDR: Make sure to Change RunType Instance to GPU at the very start :grinning:**
+
+### Installing additional applications
+
+```python
+! sudo-apt install <app name>
+```
+
+For example we might want to install **ffmpeg**, we then call `! sudo-apt install ffmpeg`. This would then try to find the application ffmpeg. Do note that this is just an examle, as it turns out Google Colab already has an **ffmpeg** application installed.
 
 ### Cloning a GitHub Repo
 
@@ -68,6 +76,40 @@ These files should still be visible after you restart a session provided that th
 Also in terms of downloading individual files from GitHub (like helper files), it is important that we select the `Raw` option first before copying the link. Simply copying the link will try to pull the webpage instead of the actual file contents.
 
 ## Miscellaneous Commands
+
+### Unzip a file
+
+There might be times where we are going to download a zipped version of a file. To unzip it we just need to pass:
+
+```python
+! unzip <filename>.zip
+```
+
+The code above is the very basic command for unzipping a file. For more options on `unzip` we can refer to [this site](https://linuxize.com/post/how-to-unzip-files-in-linux/). Covered in the link are arguments for when the zip file has a password or when just want to look at the contents of the Zip folder without extracting it.
+
+### Linking Kaggle to Colab
+
+To allow Colab to access Kaggle API we need to provide it with credentials. Login to your Kaggle account and proceed to `My Account`. Find the `Create API key` option which will create a JSON file that you can use as your credential. Once you have downloaded the API key from Kaggle you can add the following code to your Colab notebook.
+
+```python
+from google.colab import files
+files.upload() # For uploading a file directly to Colab
+```
+
+`files.upload()` is interactive, just find the JSON file and select it for upload. Once the file has been uploaded you can then run the following code:
+
+```python
+!mkdir -p ~/.kaggle
+!cp kaggle.json ~/.kaggle/
+```
+
+Its important that you name the correct diretory for this step since Kaggle would be looking at the exact location of the directory for the API key. To test the Kaggle API you can find a dataset you want to work on in Colab and click on the `Copy API command`. For example:
+
+```python
+! kaggle datasets download -d ronitf/heart-disease-uci
+```
+
+Do note that you need the `!` for it to run. The dataset would automatically get downloaded to your working directory in Google Colab or in Drive if you have already mounted your Google Drive and changed the working directory.
 
 ### Checking CUDA
 
